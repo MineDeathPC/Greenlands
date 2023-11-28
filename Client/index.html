@@ -1,0 +1,655 @@
+<html>
+ <head>
+  <style>
+
+
+
+  body{
+  background-color:coral;
+  margin:0;
+ 
+  user-select: none;
+  
+  background-size:contain;
+}
+ 
+  #mainMenuCont{
+    position:absolute;
+    width:40%;
+    height:50%;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -30%);
+    opacity:0.5;
+    background-color:green;
+  }
+
+  #playGameBtn{
+    position:relative;
+    top:20%;
+    left:50%;
+    transform: translate(-50%,-20%);
+    width:50%;
+    height:20%;
+    font-size:2em;
+    color:cyan;
+    background-color:darkblue;
+    border-width:5px;
+    border-color:black;
+    opacity:1;
+    z-index:1;
+  }
+
+  #loginCont{
+    position:absolute;
+    width:40%;
+    height:50%;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -30%);
+    opacity:0.5;
+    background-color:green;
+    display:none;
+  }
+
+  #loginBtn{
+    position:absolute;
+    top:60%;
+    left: 50%;
+    transform: translate(-50%, -60%);
+    padding:0%;
+    width:30%;
+    height:15%;
+    font-size:1.2em;
+    color:cyan;
+    background-color:darkblue;
+    border-width:5px;
+    border-color:black;
+    opacity:1;
+  }
+  #createAccBtn{
+    position:absolute;
+    top:80%;
+    left: 50%;
+    transform: translate(-50%, -60%);
+    padding:0%;
+    width:30%;
+    height:15%;
+    font-size:1.2em;
+    color:cyan;
+    background-color:darkblue;
+    border-width:5px;
+    border-color:black;
+    opacity:1;
+  }
+
+  #usernameInput{
+    position:relative;
+    top:10%;
+    left:50%;
+    transform: translate(-50%,-10%);
+    width:50%;
+    height:10%;
+    font-size:1em;
+    color:cyan;
+    background-color:darkblue;
+    border-width:5px;
+    border-color:black;
+    opacity:1;
+  }
+  #passwordInput{
+    position:relative;
+    top:20%;
+    left:50%;
+    transform: translate(-50%,-20%);
+    width:50%;
+    height:10%;
+    font-size:1em;
+    color:cyan;
+    background-color:darkblue;
+    border-width:5px;
+    border-color:black;
+    opacity:1;
+  }
+
+  #createEnterWorldCont{
+    width:95%;
+    height:95%;
+    opacity:0.7;
+    background-color:green;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+  }
+
+
+
+  #worldNameInput{
+    position:relative;
+    top:10%;
+    left:50%;
+    transform: translate(-50%,-10%);
+    width:50%;
+    height:10%;
+    font-size:2em;
+    font-style:italic;
+    color:cyan;
+    background-color:darkblue;
+    border-width:5px;
+    border-color:black;
+    opacity:1;
+  }
+
+  #enterWorldBtn{
+    position:absolute;
+    top:90%;
+    left: 90%;
+    transform: translate(-90%, -90%);
+    padding:0%;
+    width:15%;
+    height:10%;
+    font-size:2em;
+    color:cyan;
+    background-color:darkblue;
+    border-width:5px;
+    border-color:black;
+    opacity:1;
+  }
+ 
+  #createEnterWorldCont{
+    display:none;
+  }
+
+
+
+
+  .cell {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+ /* border: 3px double rgba(0,200,255,0.4); Optional: Border for visual separation*/
+  color:rgba(0,0,0,0);
+  background-repeat:no-repeat;
+  
+}
+
+#container{
+  z-index:0;
+  width:10000px;
+  height:2000px;
+  overflow:hidden;
+}
+
+#warningContainer{
+  position:absolute;
+  background-color:darkred;
+  opacity:0.7;
+  border-style:double;
+  border-radius:10%;
+  border-width:30px;
+  border-color:rgb(29, 21, 21);
+  width:20%;
+  height:30%;
+  color:burlywood;
+  top:50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display:none;
+}
+
+#warningTitle{
+  font-size:2em;
+  position:relative;
+  margin: auto;
+
+}
+#confirmWarnBtn{
+  position:absolute;
+    top:100%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    padding:0%;
+    width:30%;
+    height:15%;
+    font-size:1em;
+    color:cyan;
+    background-color:darkblue;
+    border-width:5px;
+    border-color:black;
+    opacity:1;
+}
+
+#player_primer_gui{
+  width:100%;
+  height:100%;
+  position:absolute;
+  top:0%;
+    left: 0%;
+    transform: translate(0%, -0%);
+    pointer-events:none;
+   display:none;
+}
+
+/* Style for the inventory grid container */
+#inventoryMain {
+  width: 70%; /* Adjust width as needed */
+  height: 50%; /* Adjust height as needed */
+  overflow: hidden; /* Hide overflow */
+  position: relative; /* Positioning for scrollbar */
+  top:190%;
+  left: 50%;
+  transform: translate(-50%, -190%);
+  background-color:rgba(32,178,170,0.6);
+  border:15px groove turquoise;
+  pointer-events:all;
+}
+
+/* Style for the actual inventory grid */
+#inventoryGridCont {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll; /* Enable vertical scrollbar */
+  box-sizing: content-box; /* Include padding in width/height calculation */
+ 
+}
+
+/* Style for individual inventory items (just for illustration) */
+.inventoryItem {
+  width: 50px;
+  height: 50px;
+  background-color:rgba(0,139,139,0.5); /* Adjust color for empty items */
+  border-width:10px;
+  border-style:double;
+  border-color:cyan;
+  margin: 5px;
+  display: inline-block;
+ 
+}
+
+
+#player-temp{
+  width:45px;
+  height:45px;
+  background-color:rgba(255,0,0,1);
+  position:absolute;
+  top:0;
+  left:0;
+}
+  </style>
+ </head>
+ 
+ 
+ 
+ <body>
+ <script src='https://cdn.socket.io/socket.io-1.4.5.js'></script>
+ 
+
+
+  <div id="mainMenuCont">
+    <button id="playGameBtn" onclick="clickPlayGame()">Play Game</button>
+  </div>
+
+  <div id="loginCont">
+    <input id="usernameInput" placeholder = "Username" value = 'minedeath'>
+    <input id="passwordInput" placeholder = "Password" type = "password" value="12345678">
+    <button id="loginBtn" onclick="loginFirstRequest()">Login</button>
+    <button id="createAccBtn" onclick="createAccFirstRequest()">Create Account</button>
+  </div>
+
+
+  <div id="createEnterWorldCont">
+    <input id = "worldNameInput" placeholder = "Enter world name">
+    <button id="enterWorldBtn" onclick = enterWorld()>Enter</button>
+  </div>
+
+
+
+  <div id="player_primer_gui">
+    <div id = "inventoryMain">
+      <div id = "inventoryGridCont"></div>
+    </div>
+  </div>
+  
+
+  <div id="container"></div>
+
+
+  <div id="warningContainer">
+    <h2 id="warningTitle">User Banned</h2>
+   
+    <p id = "warningMessage">Sorry that user has been banned</p>
+    <button id="confirmWarnBtn" onclick="noWarn()">OK</button>
+  </div>
+
+
+
+
+
+
+ 
+  <div id="player-temp"></div>
+   <div class = "cell"></div>
+
+  <script>
+     const socket = io();
+
+
+     
+const player = document.getElementById('player-temp');
+
+let cells = Array.from(document.querySelectorAll('.cell')).filter(a=>a.value=="has");
+
+
+let isMovingRight = false;
+let isMovingLeft = false;
+
+document.addEventListener('keydown', function (event) {
+  if (event.key === 'd') {
+    isMovingRight = true;
+  } else if (event.key === 'a') {
+    isMovingLeft = true;
+  }
+});
+
+document.addEventListener('keyup', function (event) {
+  if (event.key === 'd') {
+    isMovingRight = false;
+  } else if (event.key === 'a') {
+    isMovingLeft = false;
+  }
+});
+
+     
+
+function movePlayer() {
+  const playerRect = player.getBoundingClientRect();
+
+  if (isMovingRight) {
+    player.style.left = playerRect.left + 5 + 'px';
+  } else if (isMovingLeft) {
+    player.style.left = playerRect.left - 5 + 'px';
+  }
+
+  const playerBottom = playerRect.bottom;
+
+  // Check collision with cells
+  cells.forEach(cell => {
+    const cellRect = cell.getBoundingClientRect();
+    if (playerBottom >= cellRect.top && playerBottom <= cellRect.bottom) {
+      if (
+        (playerRect.left >= cellRect.left && playerRect.left <= cellRect.right) ||
+        (playerRect.right >= cellRect.left && playerRect.right <= cellRect.right)
+      ) {
+        player.style.bottom = cellRect.bottom + 'px';
+      }
+    }
+  });
+
+  // Automatically move down until collision with cells
+  const playerBottomAfterMove = player.getBoundingClientRect().bottom;
+  if (playerBottom === playerBottomAfterMove) {
+    player.style.bottom = playerRect.bottom - 5 + 'px';
+  }
+}
+
+// Call movePlayer function in a loop for constant movement
+
+
+
+
+
+
+
+
+
+
+var selectedCurrent = null;
+  function fillInventoryGrid() {
+    const numberOfItems = 600; // Number of empty items
+
+    for (let i = 0; i < numberOfItems; i++) {
+      const emptyItem = document.createElement('div');
+      emptyItem.className = 'inventoryItem'; // Apply the inventory item style
+      emptyItem.style.color = "lightgreen"
+      emptyItem.style.fontStyle = "italic"
+       
+      document.querySelector('#player_primer_gui #inventoryMain #inventoryGridCont').appendChild(emptyItem);
+      emptyItem.id = "inv_"+i;
+
+
+    let textSpan = document.createElement('span');
+    textSpan.className = 'inv_text';
+    textSpan.innerText = ""; // Initialize text content
+    emptyItem.appendChild(textSpan);
+
+
+      emptyItem.addEventListener('click', function(){
+        emptyItem.style.borderColor = "lightgreen";
+        
+        selectedCurrent = i;
+        document.querySelectorAll(".inventoryItem").forEach((e)=>{
+          if(e.id != "inv_"+selectedCurrent){
+            e.style.borderColor = "cyan"
+          }
+           
+        })
+      })
+    }
+  }
+
+  // Call the function to populate the inventory grid
+ 
+  //fillInventoryGrid()
+
+
+
+
+
+
+
+
+// Get the container element
+const container = document.getElementById('container');
+const cellWidth = 45; // Default cell width (adjust as needed)
+const rows = 350; // Number of rows
+const columns = 50; // Number of columns
+
+function createGrid() {
+  container.innerHTML = ''; // Clear previous content
+
+  // Calculate total number of cells
+  const totalCells = rows * columns;
+
+  // Create the grid
+  for (let i = 0; i < totalCells; i++) {
+    const cell = document.createElement('div');
+    cell.innerHTML = ""+i
+   cell.style.color = "rgba(0,0,0,0)"
+    cell.id = "cell_" + i;
+    cell.style.fontSize = "8px";
+  
+    cell.style.textAlign = "center";
+    cell.classList.add('cell');
+    cell.style.width = `${cellWidth}px`; // Set cell width
+    cell.style.height = `${cellWidth}px`; // Set cell height
+    cell.style.backgroundSize = `cover`;
+    //cell.style.backgroundColor = `red`;
+
+    // Add click event listener to change background image
+    cell.addEventListener('click', function() {
+      //block damage/placing code here
+      socket.emit('client-grid-interaction',{index:this.innerHTML,inv_selection:selectedCurrent})
+     // alert(selectedCurrent)
+    });
+
+    container.appendChild(cell);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+  socket.emit("connected");
+  socket.on('hello-client',function (){
+    console.log("server intitial connection success!")
+  });
+
+    function disable(el){
+        document.getElementById(el).style.display = "none";
+    }
+    function enable(el){
+        document.getElementById(el).style.display = "block";
+    }
+
+    function clickPlayGame(){
+      disable('mainMenuCont');
+      enable('loginCont');
+    }
+
+
+    function noWarn(){
+      disable('warningContainer')
+    }
+    socket.on('warn-client',function(title,message){
+      document.getElementById('warningTitle').innerHTML  = title;
+      document.getElementById('warningMessage').innerHTML = "<i>"+ message+"</i>";
+      enable('warningContainer')
+      console.log('warned! '+message)
+    })
+
+
+    function loginFirstRequest(){
+        let username = document.getElementById("usernameInput").value.toUpperCase().trim()
+        let password = document.getElementById("passwordInput").value.trim();
+        console.log("login attempt : " + username + ", :" + password)
+
+        socket.emit('client-login-request',{username:username,password:password})
+    }
+
+    function createAccFirstRequest(){
+      let username = document.getElementById("usernameInput").value.toUpperCase().trim()
+        let password = document.getElementById("passwordInput").value.trim();
+        console.log("register attempt : " + username + ", :" + password);
+
+        socket.emit('client-createacc-request',{username:username,password:password});
+    }
+
+
+
+    socket.on('login-sucessful',function(data){
+      console.log('login sucess! '+data);
+      disable('loginCont');
+      enable('createEnterWorldCont');
+    })
+
+
+
+
+
+    function enterWorld(){
+      let worldName = document.getElementById("worldNameInput").value.trim().toUpperCase();
+      socket.emit("client-attempt-enter-world",{worldName:worldName})
+    }
+    
+    socket.on('allow-enter-world',function(data){
+      console.log("server allowed world entry : " + data.world.world_name + ", "+data.enter_type);
+      disable('createEnterWorldCont');
+      document.body.style.backgroundImage = "url('client/img/defaultweather.jpg')"
+      enable("container")
+      createGrid();
+      enable("player_primer_gui")
+      fillInventoryGrid();
+      JSON.parse(data.world.block_data).forEach((element)=>{
+        if(element.block.name == "grass"){
+        document.querySelector("#cell_"+element.index).style.backgroundImage = "url('client/img/grass.png')"
+        document.querySelector("#cell_"+element.index).style.borderColor = "rgba(0,0,0,0)"
+        document.querySelector("#cell_"+element.index).value = "has"
+        }
+        if(element.block.name == "rock"){
+        document.querySelector("#cell_"+element.index).style.backgroundImage = "url('client/img/rock.png')"
+        document.querySelector("#cell_"+element.index).style.borderColor = "rgba(0,0,0,0)"
+        document.querySelector("#cell_"+element.index).value = "has"
+        }
+        if(element.block.name == "bedrock"){
+        document.querySelector("#cell_"+element.index).style.backgroundImage = "url('client/img/bedrock.jpg')"
+        document.querySelector("#cell_"+element.index).style.borderColor = "rgba(0,0,0,0)"
+        document.querySelector("#cell_"+element.index).value = "has"
+        }
+      })
+
+      //load inventory
+      setInterval(movePlayer, 1000 / 60); // Adjust the interval for smoother movement
+    })
+
+
+
+
+
+
+
+
+    socket.on('place',function(block,index){
+      document.getElementById("cell_"+index).style.backgroundImage = `url('client/img/${block}.png')`
+      document.getElementById("cell_"+index).style.borderColor = "rgba(0,0,0,0)"
+      document.getElementById("cell_"+index).style.color = "rgba(0,0,0,0)";
+      document.getElementById("cell_"+index).value = "has"
+    })
+
+    
+    socket.on('build-inv-on-entry',function(data){
+      alert('build')
+      var inv_data = document.querySelectorAll('.inventoryItem');
+      for(i=0;i<inv_data.length;i++){
+        console.log(i)
+        console.log(inv_data[i])
+        inv_data[i].value = data[i].slot_name+","+data[i].amount;
+        inv_data[i].style.backgroundImage = `url('client/img/${data[i].slot_name}.png')`;
+        inv_data[i].style.backgroundSize = "contain"
+        inv_data[i].style.borderWidth =  "5px"
+        const textElement = inv_data[i].querySelector('.inv_text');
+
+if (textElement) {
+  if(data[i].amount != null){
+    textElement.innerText = `${data[i].amount}`;
+    textElement.style.color = 'lightgreen';
+  }
+  else{
+    textElement.innerText = "."
+    textElement.style.color = "rgba(0,0,0,0)"
+  }
+  
+   
+ 
+}
+       
+      }
+    })
+
+
+
+
+
+    socket.on('deduct-block',function(slot_no,amount){
+      console.log(slot_no)
+      let data = document.querySelector("#inv_"+slot_no).querySelector(".inv_text").innerText;
+      document.querySelector("#inv_"+slot_no).querySelector(".inv_text").innerText = ""+(parseInt(data) - amount)
+    })
+  </script>
+
+ </body>
+</html>
