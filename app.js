@@ -335,10 +335,10 @@ function updateWorldBlockData(worldName, blockIndex, newBlockData) {
       let block_build_selector = {}; block_build_selector[unique] = randomInt(0,10);
       if(block_build_selector[unique]==1){
         //rock
-         block_data[unique].push({index:i,block:{name:"rock",maxHealth:10,health:10,data:{}}});
+         block_data[unique].push({index:i,block:{name:"air",maxHealth:10,health:10,data:{}}});
       }
       else{
-        block_data[unique].push({index:i,block:{name:"dirt",maxHealth:5,health:5,data:{}}});
+        block_data[unique].push({index:i,block:{name:"air",maxHealth:5,health:5,data:{}}});
       }
 
     }
@@ -360,10 +360,10 @@ function updateWorldBlockData(worldName, blockIndex, newBlockData) {
       let block_build_selector = {}; block_build_selector[unique] = randomInt(0,10);
       if(block_build_selector[unique]==1){
         //rock
-         block_data[unique].push({index:i,block:{name:"air",maxHealth:10,health:10,data:{}}});
+         block_data[unique].push({index:i,block:{name:"rock",maxHealth:10,health:10,data:{}}});
       }
       else{
-        block_data[unique].push({index:i,block:{name:"air",maxHealth:5,health:5,data:{}}});
+        block_data[unique].push({index:i,block:{name:"dirt",maxHealth:5,health:5,data:{}}});
       }
 
     }

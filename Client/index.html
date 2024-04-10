@@ -223,7 +223,7 @@
 #player_primer_gui{
   width:100%;
   height:100%;
-  position:absolute;
+  position:fixed;
   top:0%;
     left: 0%;
     transform: translate(0%, -0%);
@@ -271,9 +271,10 @@
 #player-temp{
   width:45px;
   height:45px;
-  background-color:rgba(255,0,0,1);
+  background-color:rgba(100,255,255,0.5);
   position:absolute;
-  top:0;
+  top:0px;
+  bottom:0px;
   left:0;
 }
   </style>
@@ -325,78 +326,170 @@
 
 
 
+  
+
+
 
 
  
   <div id="player-temp"></div>
-   <div class = "cell"></div>
+   
 
   <script>
      const socket = io();
 
 
      
-const player = document.getElementById('player-temp');
-
-let cells = Array.from(document.querySelectorAll('.cell')).filter(a=>a.value=="has");
-
+     const player = document.getElementById('player-temp');
+     player.style.top = "0px"
+let cells; // Assuming you have cell elements defined somewhere
 
 let isMovingRight = false;
 let isMovingLeft = false;
 
+
+
+let isJumping = false;
+let jumpHeight = 5; // Adjust the jump height as needed
+
+
 document.addEventListener('keydown', function (event) {
+ 
+
+
+   
+
   if (event.key === 'd') {
+    
     isMovingRight = true;
+   
   } else if (event.key === 'a') {
+   
     isMovingLeft = true;
+   
+  } else if (event.key === 'w') {
+    const playerRect = player.getBoundingClientRect();
+    const playerBottom = playerRect.top + playerRect.height;
+
+    cells.forEach(cell => {
+      const cellRect = cell.getBoundingClientRect();
+      
+      // Check if there's a cell below the player
+      if (
+        playerBottom >= cellRect.top &&
+        playerBottom <= cellRect.bottom &&
+        ((playerRect.left >= cellRect.left && playerRect.left <= cellRect.right) ||
+          (playerRect.right >= cellRect.left && playerRect.right <= cellRect.right))
+      ) {
+        if (!isJumping) {
+          isJumping = true;
+          jumpPlayer();
+        }
+      }
+    });
   }
 });
+
+function jumpPlayer() {
+  let jumpCount = 0;
+  const jumpInterval = setInterval(() => {
+    const playerRect = player.getBoundingClientRect();
+    const currentTop = parseInt(player.style.top);
+
+    if (jumpCount >= jumpHeight) {
+      clearInterval(jumpInterval);
+      isJumping = false;
+      // Player lands, continue falling logic here if needed
+    } else {
+      player.style.top = (currentTop - 15) + 'px'; // Adjust the jump speed
+      jumpCount++;
+    }
+  }, 10); // Adjust the interval for smoothness
+}
 
 document.addEventListener('keyup', function (event) {
   if (event.key === 'd') {
     isMovingRight = false;
+    
   } else if (event.key === 'a') {
     isMovingLeft = false;
+   
   }
 });
 
-     
-
 function movePlayer() {
+  
+
   const playerRect = player.getBoundingClientRect();
 
-  if (isMovingRight) {
-    player.style.left = playerRect.left + 5 + 'px';
-  } else if (isMovingLeft) {
-    player.style.left = playerRect.left - 5 + 'px';
+  
+
+  const playerBottom = playerRect.top + playerRect.height; // Use bottom position of the player
+  const playerLeft = playerRect.left;
+  const playerRight = playerRect.right;
+
+  let isColliding = false;
+  let isCollidingLeft = false;
+  let isCollidingRight = false;
+
+  const adjacentLeftCell = cells.find(cell => {
+    const cellRect = cell.getBoundingClientRect();
+    return (
+      playerBottom >= cellRect.top &&
+      playerRect.top <= cellRect.bottom &&
+      playerLeft === cellRect.right // Check if player's left edge aligns with cell's right edge
+    );
+  });
+
+  const adjacentRightCell = cells.find(cell => {
+    const cellRect = cell.getBoundingClientRect();
+    return (
+      playerBottom >= cellRect.top &&
+      playerRect.top <= cellRect.bottom &&
+      playerRight === cellRect.left // Check if player's right edge aligns with cell's left edge
+    );
+  });
+
+  if (adjacentLeftCell) {
+    isCollidingLeft = true;
   }
 
-  const playerBottom = playerRect.bottom;
+  if (adjacentRightCell) {
+    isCollidingRight = true;
+  }
 
-  // Check collision with cells
   cells.forEach(cell => {
     const cellRect = cell.getBoundingClientRect();
-    if (playerBottom >= cellRect.top && playerBottom <= cellRect.bottom) {
-      if (
-        (playerRect.left >= cellRect.left && playerRect.left <= cellRect.right) ||
-        (playerRect.right >= cellRect.left && playerRect.right <= cellRect.right)
-      ) {
-        player.style.bottom = cellRect.bottom + 'px';
-      }
+
+   
+
+
+
+    if (
+      playerBottom >= cellRect.top &&
+      playerBottom <= cellRect.bottom &&
+      ((playerLeft >= cellRect.left && playerLeft <= cellRect.right) ||
+        (playerRight >= cellRect.left && playerRight <= cellRect.right))
+    ) {
+      player.style.top = player.style.top
+      isColliding = true;
     }
   });
 
-  // Automatically move down until collision with cells
-  const playerBottomAfterMove = player.getBoundingClientRect().bottom;
-  if (playerBottom === playerBottomAfterMove) {
-    player.style.bottom = playerRect.bottom - 5 + 'px';
+  if (isMovingRight && !isCollidingRight) {
+    player.style.left = playerRect.left + 10 + 'px';
+   
+  } else if (isMovingLeft  && !isCollidingLeft) {
+    player.style.left = playerRect.left - 10 + 'px';
+   
   }
+
+  // If there's no collision with a cell below, allow the player to fall
+  if (!isColliding && !isJumping) {
+    player.style.top = parseInt(player.style.top) + 15 + 'px';
+  }
+  console.log(isCollidingRight)
 }
-
-// Call movePlayer function in a loop for constant movement
-
-
-
 
 
 
@@ -575,8 +668,8 @@ function createGrid() {
       enable("player_primer_gui")
       fillInventoryGrid();
       JSON.parse(data.world.block_data).forEach((element)=>{
-        if(element.block.name == "grass"){
-        document.querySelector("#cell_"+element.index).style.backgroundImage = "url('client/img/grass.png')"
+        if(element.block.name == "dirt"){
+        document.querySelector("#cell_"+element.index).style.backgroundImage = "url('client/img/dirt.png')"
         document.querySelector("#cell_"+element.index).style.borderColor = "rgba(0,0,0,0)"
         document.querySelector("#cell_"+element.index).value = "has"
         }
@@ -592,8 +685,12 @@ function createGrid() {
         }
       })
 
+
+
+      cells = Array.from(document.querySelectorAll('.cell')).filter(a=>a.value=="has");
+
       //load inventory
-      setInterval(movePlayer, 1000 / 60); // Adjust the interval for smoother movement
+      setInterval(movePlayer, 0.04); // Adjust the interval for smoother movement
     })
 
 
@@ -612,7 +709,7 @@ function createGrid() {
 
     
     socket.on('build-inv-on-entry',function(data){
-      alert('build')
+     // alert('build')
       var inv_data = document.querySelectorAll('.inventoryItem');
       for(i=0;i<inv_data.length;i++){
         console.log(i)
