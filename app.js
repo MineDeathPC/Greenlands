@@ -4,9 +4,9 @@ var express = require('express');
 var app = express();
 var serv = require('http').Server(app);
 app.get('/',function(req,res){
-	res.sendFile(__dirname+'/client/index.html');
+	res.sendFile(__dirname+'/Client/index.html');
 })
-app.use('/client',express.static(__dirname + '/client'));
+app.use('/Client',express.static(__dirname + '/Client'));
 serv.listen(port);
 const fs = require('fs')
 
@@ -35,8 +35,8 @@ function randomInt(min, max) {
 const sqlite3 = require('sqlite3').verbose();
 
 // Path to your existing SQLite database file
-const dbPath = 'data/player_data.db';
-const world_dbPath = 'data/world_data.db'
+const dbPath = 'Data/player_data.db';
+const world_dbPath = 'Data/world_data.db'
 
 // Connect to the existing SQLite database
 const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE, (err) => {
